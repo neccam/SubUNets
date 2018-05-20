@@ -1,0 +1,7 @@
+wget "http://cihancamgoz.com/files/subunets/HandSubUNet"
+wget "http://cihancamgoz.com/files/subunets/WordSubUNet-FullFrame-SingleLayer"
+wget "http://cihancamgoz.com/files/subunets/WordSubUNet-FullFrame-TwoLayer"
+wget "http://cihancamgoz.com/files/subunets/WordSubUNet-HandFrame-TwoLayer"
+wget "http://cihancamgoz.com/files/subunets/SignSubUNets-Expert-Fixed"
+wget "http://cihancamgoz.com/files/subunets/SignSubUNets-Expert-NotFixed"
+wget "http://cihancamgoz.com/files/subunets/SignSubUNets-Generic"
