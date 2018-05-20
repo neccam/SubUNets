@@ -5,14 +5,22 @@ This repo contains the caffe models, prototoxt files and the evaluation scripts 
 * Download and compile the custom caffe-ctc developed by [ChWick](https://github.com/ChWick/caffe/tree/ctc) including pyCaffe. 
 * Download and extract [One-Million-Hands](https://www-i6.informatik.rwth-aachen.de/~koller/1miohands-data/) dataset.
 * Download and extract [RWTH-PHOENIX-Weather 2014: Continuous Sign Language Recognition Dataset](https://www-i6.informatik.rwth-aachen.de/~koller/RWTH-PHOENIX/) dataset.
-* Download and install TensorFlow 1.3.0+ (For beam search decoding.) 
+* Download and install [TensorFlow](https://www.tensorflow.org/) 1.3.0+ (TF is used for beam search decoding. Tested with TF 1.3) 
+* Download models using the script `Models\download_models.sh`
 
 ## Usage
-python evaluate.py --model <model_name> --phoenix_path <> --one_mil_path <Path to your one-million hands >
+`python evaluate.py --model <model_name> --phoenix_dir </path/to/phoenix/2014/> --one_mil_dir </path/to/one/mil/hands/>`
 
-model_names:
-HandSubUNets: 
-WordSubUnets-
+Models which require `phoenix_dir` to be set
+* `WordSubUNet-FullFrame-SingleLayer`
+* `WordSubUnet-FullFrame-TwoLayer`
+* `WordSubUnet-HandFrame-TwoLayer`
+* `SignSubUNets-Expert-Fixed`
+* `SignSubUNets-Expert-NotFixed`
+* `SignSubUNets-Generic`
+
+Models which require `one_mil_dir` to be set
+* `HandSubUNets` 
 
 ## Reference
 Please cite the paper below if you use this code in your research:
