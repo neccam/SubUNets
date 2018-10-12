@@ -1,3 +1,8 @@
+## TODO
+* Upload Models to Dropbox and update the download model link
+* Upload Prototxt Files
+* Write unified evaluation script.
+
 # SubUNets
 This repo contains the caffe models, prototoxt files and the evaluation scripts from Camgoz et al's ["SubUNets: End-to-end Hand Shape and Continuous Sign Language Recognition"](http://www.cihancamgoz.com/pub/camgoz2017iccv.pdf) (ICCV'17).
 
@@ -15,8 +20,7 @@ Models which require `phoenix_dir` to be set
 * `WordSubUNet-FullFrame-SingleLayer`
 * `WordSubUnet-FullFrame-TwoLayer`
 * `WordSubUnet-HandFrame-TwoLayer`
-* `SignSubUNets-Expert-Fixed`
-* `SignSubUNets-Expert-NotFixed`
+* `SignSubUNets-Expert`
 * `SignSubUNets-Generic`
 
 Models which require `one_mil_dir` to be set

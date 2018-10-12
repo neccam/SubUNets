@@ -1,0 +1,14 @@
+
+Model/SignSubUNets-Expert\.h5
+
+Model/SignSubUNets-Expert\.caffemodel\.h5
+
+Model/HandSubUNet\.caffemodel
+
+Model/SignSubUNets-Generic\.caffemodel\.h5
+
+Model/WordSubUNet-FullFrame-TwoLayer\.caffemodel
+
+Model/WordSubUNet-HandFrame-TwoLayer\.caffemodel
+
+Model/WordSubUNet-FullFrame-SingleLayer\.caffemodel

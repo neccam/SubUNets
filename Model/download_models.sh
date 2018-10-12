@@ -1,0 +1,6 @@
+wget "https://www.dropbox.com/s/4k8ae6yqqtaapwj/HandSubUNet.caffemodel?dl=0"
+wget "https://www.dropbox.com/s/56rkquutaxevpjc/SignSubUNets-Expert.caffemodel.h5?dl=0"
+wget "https://www.dropbox.com/s/z4ht1r638smrxed/SignSubUNets-Generic.caffemodel.h5?dl=0"
+wget "https://www.dropbox.com/s/qhsg62lqck694td/WordSubUNet-FullFrame-SingleLayer.caffemodel?dl=0"
+wget "https://www.dropbox.com/s/15m1rvuxa9818a4/WordSubUNet-FullFrame-TwoLayer.caffemodel?dl=0"
+wget "https://www.dropbox.com/s/m2vjy627zo6gdk5/WordSubUNet-HandFrame-TwoLayer.caffemodel?dl=0"
