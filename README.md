@@ -1,6 +1,6 @@
 ## TODO
 * ~~Upload Models to Dropbox and update the download model link~~
-* Upload Prototxt Files
+* ~~Upload Prototxt Files~~
 * Write unified evaluation script.
 
 # SubUNets

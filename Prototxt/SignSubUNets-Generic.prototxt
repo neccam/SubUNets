@@ -1,0 +1,1208 @@
+##############################################################################################################
+##############################################################################################################
+########################################### FRAME NETWORK  ###################################################
+##############################################################################################################
+##############################################################################################################
+input: "frame_data"
+input_shape { dim: 300 dim: 3 dim: 224 dim: 224 }
+input: "hand_data"
+input_shape { dim: 300 dim: 3 dim: 224 dim: 224 }
+input: "seq_ind"
+input_shape { dim: 300 dim: 1}
+input: "bw_seq_ind"
+input_shape { dim: 300 dim: 1}
+layer {
+  name: "frame_conv1"
+  type: "Convolution"
+  bottom: "frame_data"
+  top: "frame_conv1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 96
+    kernel_size: 11
+    stride: 4
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "frame_relu1"
+  type: "ReLU"
+  bottom: "frame_conv1"
+  top: "frame_conv1"
+}
+layer {
+  name: "frame_pool1"
+  type: "Pooling"
+  bottom: "frame_conv1"
+  top: "frame_pool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "frame_norm1"
+  type: "LRN"
+  bottom: "frame_pool1"
+  top: "frame_norm1"
+  lrn_param {
+    local_size: 5
+    alpha: 0.0001
+    beta: 0.75
+  }
+}
+layer {
+  name: "frame_conv2"
+  type: "Convolution"
+  bottom: "frame_norm1"
+  top: "frame_conv2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 2
+    kernel_size: 5
+    group: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 1
+    }
+  }
+}
+layer {
+  name: "frame_relu2"
+  type: "ReLU"
+  bottom: "frame_conv2"
+  top: "frame_conv2"
+}
+layer {
+  name: "frame_pool2"
+  type: "Pooling"
+  bottom: "frame_conv2"
+  top: "frame_pool2"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "frame_norm2"
+  type: "LRN"
+  bottom: "frame_pool2"
+  top: "frame_norm2"
+  lrn_param {
+    local_size: 5
+    alpha: 0.0001
+    beta: 0.75
+  }
+}
+layer {
+  name: "frame_conv3"
+  type: "Convolution"
+  bottom: "frame_norm2"
+  top: "frame_conv3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 384
+    pad: 1
+    kernel_size: 3
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "frame_relu3"
+  type: "ReLU"
+  bottom: "frame_conv3"
+  top: "frame_conv3"
+}
+layer {
+  name: "frame_conv4"
+  type: "Convolution"
+  bottom: "frame_conv3"
+  top: "frame_conv4"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 384
+    pad: 1
+    kernel_size: 3
+    group: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 1
+    }
+  }
+}
+layer {
+  name: "frame_relu4"
+  type: "ReLU"
+  bottom: "frame_conv4"
+  top: "frame_conv4"
+}
+layer {
+  name: "frame_conv5"
+  type: "Convolution"
+  bottom: "frame_conv4"
+  top: "frame_conv5"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    group: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 1
+    }
+  }
+}
+layer {
+  name: "frame_relu5"
+  type: "ReLU"
+  bottom: "frame_conv5"
+  top: "frame_conv5"
+}
+layer {
+  name: "frame_pool5"
+  type: "Pooling"
+  bottom: "frame_conv5"
+  top: "frame_pool5"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "frame_fc6"
+  type: "InnerProduct"
+  bottom: "frame_pool5"
+  top: "frame_fc6"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 4096
+    weight_filler {
+      type: "gaussian"
+      std: 0.005
+    }
+    bias_filler {
+      type: "constant"
+      value: 1
+    }
+  }
+}
+layer {
+  name: "frame_relu6"
+  type: "ReLU"
+  bottom: "frame_fc6"
+  top: "frame_fc6"
+}
+layer {
+  name: "frame_drop6"
+  type: "Dropout"
+  bottom: "frame_fc6"
+  top: "frame_fc6"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+layer {
+  name: "frame_fc7"
+  type: "InnerProduct"
+  bottom: "frame_fc6"
+  top: "frame_fc7"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 4096
+    weight_filler {
+      type: "gaussian"
+      std: 0.005
+    }
+    bias_filler {
+      type: "constant"
+      value: 1
+    }
+  }
+}
+layer {
+  name: "frame_relu7"
+  type: "ReLU"
+  bottom: "frame_fc7"
+  top: "frame_fc7"
+}
+layer {
+  name: "frame_drop7"
+  type: "Dropout"
+  bottom: "frame_fc7"
+  top: "frame_fc7"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+
+#############################################################################
+##### CaffeNet Finished Here - Reshape Fully Connected Layer [FC7]
+#############################################################################
+layer {
+    name: "frame_reshape_first"
+    type: "Reshape"
+    bottom: "frame_fc7"
+    top: "frame_lstm_data"
+    reshape_param {
+      shape {
+        dim: 0
+        dim: 1
+        dim: -1
+      }
+    }
+} 
+
+
+###########################################################################################################
+############################################## BLSTM LAYER 1 ##############################################
+###########################################################################################################
+## Bottom: lstm_data
+## Top: combined_lstm
+###########################################################################################################
+
+###########################
+##### Forward Network #####
+###########################
+
+layer {
+  name: "frame_lstm_forward"
+  type: "LSTM"
+  bottom: "frame_lstm_data"
+  bottom: "seq_ind"
+  top: "frame_lstm_forward"
+  recurrent_param {
+    num_output: 1024
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "frame_lstm_forward_drop"
+  type: "Dropout"
+  bottom: "frame_lstm_forward"
+  top: "frame_lstm_forward"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+
+############################
+##### Backward Network #####
+############################
+
+layer {
+  name: "frame_reverse_data"
+  type: "Reverse"
+  bottom: "frame_lstm_data"
+  top: "frame_rev_lstm_data"
+}
+layer {
+  name: "frame_lstm_backward"
+  type: "LSTM"
+  bottom: "frame_rev_lstm_data"
+  bottom: "bw_seq_ind"
+  top: "frame_lstm_backward"
+  recurrent_param {
+    num_output: 1024
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "frame_lstm_backward_drop"
+  type: "Dropout"
+  bottom: "frame_lstm_backward"
+  top: "frame_lstm_backward"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+layer {
+  name: "frame_reverse_lstm_output"
+  type: "Reverse"
+  bottom: "frame_lstm_backward"
+  top: "frame_rev_lstm_backward"
+}
+
+#########################
+##### Join Networks #####
+#########################
+
+layer {
+  name: "frame_combined_lstm_data"
+  bottom: "frame_rev_lstm_backward"
+  bottom: "frame_lstm_forward"
+  top: "frame_combined_lstm"
+  type: "Concat"
+  concat_param {
+    axis: 2
+  }
+}
+
+###########################################################################################################
+############################################## BLSTM LAYER 2 ##############################################
+###########################################################################################################
+## Bottom: combined_lstm
+## Top: combined_lstm_2
+###########################################################################################################
+
+###########################
+##### Forward Network #####
+###########################
+
+layer {
+  name: "frame_lstm_forward_2"
+  type: "LSTM"
+  bottom: "frame_combined_lstm"
+  bottom: "seq_ind"
+  top: "frame_lstm_forward_2"
+  recurrent_param {
+    num_output: 1024
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "frame_lstm_forward_drop_2"
+  type: "Dropout"
+  bottom: "frame_lstm_forward_2"
+  top: "frame_lstm_forward_2"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+
+############################
+##### Backward Network #####
+############################
+
+layer {
+  name: "frame_reverse_data_2"
+  type: "Reverse"
+  bottom: "frame_combined_lstm"
+  top: "frame_rev_lstm_data_2"
+}
+layer {
+  name: "frame_lstm_backward_2"
+  type: "LSTM"
+  bottom: "frame_rev_lstm_data_2"
+  bottom: "bw_seq_ind"
+  top: "frame_lstm_backward_2"
+  recurrent_param {
+    num_output: 1024
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "frame_lstm_backward_drop_2"
+  type: "Dropout"
+  bottom: "frame_lstm_backward_2"
+  top: "frame_lstm_backward_2"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+layer {
+  name: "frame_reverse_lstm_output_2"
+  type: "Reverse"
+  bottom: "frame_lstm_backward_2"
+  top: "frame_rev_lstm_backward_2"
+}
+
+#########################
+##### Join Networks #####
+#########################
+
+layer {
+  name: "frame_combined_lstm_data_2"
+  bottom: "frame_rev_lstm_backward_2"
+  bottom: "frame_lstm_forward_2"
+  top: "frame_combined_lstm_2"
+  type: "Concat"
+  concat_param {
+    axis: 2
+  }
+}
+
+#############################################################################
+##### IP Layer
+#############################################################################
+
+layer {
+  name: "frame_ip_layer"
+  type: "InnerProduct"
+  bottom: "frame_combined_lstm_2"
+  top: "frame_ip_layer"
+  inner_product_param {
+    num_output: 1232
+    weight_filler {
+      type: "xavier"
+    }
+    axis: 2
+  }
+}
+
+##############################################################################################################
+##############################################################################################################
+########################################### HAND NETWORK  ####################################################
+##############################################################################################################
+##############################################################################################################
+layer {
+  name: "hand_conv1"
+  type: "Convolution"
+  bottom: "hand_data"
+  top: "hand_conv1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 96
+    kernel_size: 11
+    stride: 4
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "hand_relu1"
+  type: "ReLU"
+  bottom: "hand_conv1"
+  top: "hand_conv1"
+}
+layer {
+  name: "hand_pool1"
+  type: "Pooling"
+  bottom: "hand_conv1"
+  top: "hand_pool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "hand_norm1"
+  type: "LRN"
+  bottom: "hand_pool1"
+  top: "hand_norm1"
+  lrn_param {
+    local_size: 5
+    alpha: 0.0001
+    beta: 0.75
+  }
+}
+layer {
+  name: "hand_conv2"
+  type: "Convolution"
+  bottom: "hand_norm1"
+  top: "hand_conv2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 2
+    kernel_size: 5
+    group: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 1
+    }
+  }
+}
+layer {
+  name: "hand_relu2"
+  type: "ReLU"
+  bottom: "hand_conv2"
+  top: "hand_conv2"
+}
+layer {
+  name: "hand_pool2"
+  type: "Pooling"
+  bottom: "hand_conv2"
+  top: "hand_pool2"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "hand_norm2"
+  type: "LRN"
+  bottom: "hand_pool2"
+  top: "hand_norm2"
+  lrn_param {
+    local_size: 5
+    alpha: 0.0001
+    beta: 0.75
+  }
+}
+layer {
+  name: "hand_conv3"
+  type: "Convolution"
+  bottom: "hand_norm2"
+  top: "hand_conv3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 384
+    pad: 1
+    kernel_size: 3
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "hand_relu3"
+  type: "ReLU"
+  bottom: "hand_conv3"
+  top: "hand_conv3"
+}
+layer {
+  name: "hand_conv4"
+  type: "Convolution"
+  bottom: "hand_conv3"
+  top: "hand_conv4"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 384
+    pad: 1
+    kernel_size: 3
+    group: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 1
+    }
+  }
+}
+layer {
+  name: "hand_relu4"
+  type: "ReLU"
+  bottom: "hand_conv4"
+  top: "hand_conv4"
+}
+layer {
+  name: "hand_conv5"
+  type: "Convolution"
+  bottom: "hand_conv4"
+  top: "hand_conv5"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    group: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 1
+    }
+  }
+}
+layer {
+  name: "hand_relu5"
+  type: "ReLU"
+  bottom: "hand_conv5"
+  top: "hand_conv5"
+}
+layer {
+  name: "hand_pool5"
+  type: "Pooling"
+  bottom: "hand_conv5"
+  top: "hand_pool5"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "hand_fc6"
+  type: "InnerProduct"
+  bottom: "hand_pool5"
+  top: "hand_fc6"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 4096
+    weight_filler {
+      type: "gaussian"
+      std: 0.005
+    }
+    bias_filler {
+      type: "constant"
+      value: 1
+    }
+  }
+}
+layer {
+  name: "hand_relu6"
+  type: "ReLU"
+  bottom: "hand_fc6"
+  top: "hand_fc6"
+}
+layer {
+  name: "hand_drop6"
+  type: "Dropout"
+  bottom: "hand_fc6"
+  top: "hand_fc6"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+layer {
+  name: "hand_fc7"
+  type: "InnerProduct"
+  bottom: "hand_fc6"
+  top: "hand_fc7"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 4096
+    weight_filler {
+      type: "gaussian"
+      std: 0.005
+    }
+    bias_filler {
+      type: "constant"
+      value: 1
+    }
+  }
+}
+layer {
+  name: "hand_relu7"
+  type: "ReLU"
+  bottom: "hand_fc7"
+  top: "hand_fc7"
+}
+layer {
+  name: "hand_drop7"
+  type: "Dropout"
+  bottom: "hand_fc7"
+  top: "hand_fc7"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+
+#############################################################################
+##### CaffeNet Finished Here - Reshape Fully Connected Layer [FC7]
+#############################################################################
+layer {
+    name: "hand_reshape_first"
+    type: "Reshape"
+    bottom: "hand_fc7"
+    top: "hand_lstm_data"
+    reshape_param {
+      shape {
+        dim: 0
+        dim: 1
+        dim: -1
+      }
+    }
+} 
+
+###########################################################################################################
+############################################## BLSTM LAYER 1 ##############################################
+###########################################################################################################
+## Bottom: lstm_data
+## Top: combined_lstm
+###########################################################################################################
+
+###########################
+##### Forward Network #####
+###########################
+
+layer {
+  name: "hand_lstm_forward"
+  type: "LSTM"
+  bottom: "hand_lstm_data"
+  bottom: "seq_ind"
+  top: "hand_lstm_forward"
+  recurrent_param {
+    num_output: 1024
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "hand_lstm_forward_drop"
+  type: "Dropout"
+  bottom: "hand_lstm_forward"
+  top: "hand_lstm_forward"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+
+############################
+##### Backward Network #####
+############################
+
+layer {
+  name: "hand_reverse_data"
+  type: "Reverse"
+  bottom: "hand_lstm_data"
+  top: "hand_rev_lstm_data"
+}
+layer {
+  name: "hand_lstm_backward"
+  type: "LSTM"
+  bottom: "hand_rev_lstm_data"
+  bottom: "bw_seq_ind"
+  top: "hand_lstm_backward"
+  recurrent_param {
+    num_output: 1024
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "hand_lstm_backward_drop"
+  type: "Dropout"
+  bottom: "hand_lstm_backward"
+  top: "hand_lstm_backward"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+layer {
+  name: "hand_reverse_lstm_output"
+  type: "Reverse"
+  bottom: "hand_lstm_backward"
+  top: "hand_rev_lstm_backward"
+}
+
+#########################
+##### Join Networks #####
+#########################
+
+layer {
+  name: "hand_combined_lstm_data"
+  bottom: "hand_rev_lstm_backward"
+  bottom: "hand_lstm_forward"
+  top: "hand_combined_lstm"
+  type: "Concat"
+  concat_param {
+    axis: 2
+  }
+}
+
+###########################################################################################################
+############################################## BLSTM LAYER 2 ##############################################
+###########################################################################################################
+## Bottom: combined_lstm
+## Top: combined_lstm_2
+###########################################################################################################
+
+###########################
+##### Forward Network #####
+###########################
+
+layer {
+  name: "hand_lstm_forward_2"
+  type: "LSTM"
+  bottom: "hand_combined_lstm"
+  bottom: "seq_ind"
+  top: "hand_lstm_forward_2"
+  recurrent_param {
+    num_output: 1024
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "hand_lstm_forward_drop_2"
+  type: "Dropout"
+  bottom: "hand_lstm_forward_2"
+  top: "hand_lstm_forward_2"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+
+############################
+##### Backward Network #####
+############################
+
+layer {
+  name: "hand_reverse_data_2"
+  type: "Reverse"
+  bottom: "hand_combined_lstm"
+  top: "hand_rev_lstm_data_2"
+}
+layer {
+  name: "hand_lstm_backward_2"
+  type: "LSTM"
+  bottom: "hand_rev_lstm_data_2"
+  bottom: "bw_seq_ind"
+  top: "hand_lstm_backward_2"
+  recurrent_param {
+    num_output: 1024
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "hand_lstm_backward_drop_2"
+  type: "Dropout"
+  bottom: "hand_lstm_backward_2"
+  top: "hand_lstm_backward_2"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+layer {
+  name: "hand_reverse_lstm_output_2"
+  type: "Reverse"
+  bottom: "hand_lstm_backward_2"
+  top: "hand_rev_lstm_backward_2"
+}
+
+#########################
+##### Join Networks #####
+#########################
+
+layer {
+  name: "hand_combined_lstm_data_2"
+  bottom: "hand_rev_lstm_backward_2"
+  bottom: "hand_lstm_forward_2"
+  top: "hand_combined_lstm_2"
+  type: "Concat"
+  concat_param {
+    axis: 2
+  }
+}
+
+#############################################################################
+##### IP Layer
+#############################################################################
+
+layer {
+  name: "hand_ip_layer"
+  type: "InnerProduct"
+  bottom: "hand_combined_lstm_2"
+  top: "hand_ip_layer"
+  inner_product_param {
+    num_output: 1232
+    weight_filler {
+      type: "xavier"
+    }
+    axis: 2
+  }
+}
+
+###########################################################################################################
+###########################################################################################################
+############################################ JOIN NETWORKS ################################################
+###########################################################################################################
+###########################################################################################################
+
+layer {
+  name: "combined_networks"
+  bottom: "frame_combined_lstm_2"
+  bottom: "hand_combined_lstm_2"
+  top: "join_lstm_data"
+  type: "Concat"
+  concat_param {
+    axis: 2
+  }
+}
+
+###########################################################################################################
+############################################## BLSTM LAYER 1 ##############################################
+###########################################################################################################
+## Bottom: lstm_data
+## Top: combined_lstm
+###########################################################################################################
+
+###########################
+##### Forward Network #####
+###########################
+
+layer {
+  name: "join_lstm_forward"
+  type: "LSTM"
+  bottom: "join_lstm_data"
+  bottom: "seq_ind"
+  top: "join_lstm_forward"
+  recurrent_param {
+    num_output: 1024
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "join_lstm_forward_drop"
+  type: "Dropout"
+  bottom: "join_lstm_forward"
+  top: "join_lstm_forward"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+
+############################
+##### Backward Network #####
+############################
+
+layer {
+  name: "join_reverse_data"
+  type: "Reverse"
+  bottom: "join_lstm_data"
+  top: "join_rev_lstm_data"
+}
+layer {
+  name: "join_lstm_backward"
+  type: "LSTM"
+  bottom: "join_rev_lstm_data"
+  bottom: "bw_seq_ind"
+  top: "join_lstm_backward"
+  recurrent_param {
+    num_output: 1024
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "join_lstm_backward_drop"
+  type: "Dropout"
+  bottom: "join_lstm_backward"
+  top: "join_lstm_backward"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+layer {
+  name: "join_reverse_lstm_output"
+  type: "Reverse"
+  bottom: "join_lstm_backward"
+  top: "join_rev_lstm_backward"
+}
+
+#########################
+##### Join Networks #####
+#########################
+
+layer {
+  name: "join_combined_lstm_data"
+  bottom: "join_rev_lstm_backward"
+  bottom: "join_lstm_forward"
+  top: "join_combined_lstm"
+  type: "Concat"
+  concat_param {
+    axis: 2
+  }
+}
+
+#############################################################################
+##### IP Layer
+#############################################################################
+
+layer {
+  name: "join_ip_layer"
+  type: "InnerProduct"
+  bottom: "join_combined_lstm"
+  top: "join_ip_layer"
+  inner_product_param {
+    num_output: 1232
+    weight_filler {
+      type: "xavier"
+    }
+    axis: 2
+  }
+}
+
+layer {
+  name: "Silence2"
+  type: "Silence"
+  bottom: "hand_ip_layer"
+  bottom: "frame_ip_layer"
+}
